@@ -19,16 +19,16 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 
-module padder16(A, B, Cin, S);
+module padder16(A, Cin, S);
   localparam N = 16;
-  input [N-1:0] A, B;
+  input [N-1:0] A;
   input Cin;
   output [N-1:0] S;
   // P[i] is an alias for Pi:i, likewise G[i] is an alias for Gi:i
   wire [N-2:-1] P, G;
 
-  assign P = {A[N-2:0] | B[N-2:0], 1'b0};
-  assign G = {A[N-2:0] & B[N-2:0], Cin};
+  assign P = {A[N-2:0], 1'b0};
+  assign G = {{N{1'b0}}, Cin};
 
   assign S[0] = A[0] ^ G[-1];
 
@@ -216,5 +216,5 @@ module abs16(in, out);
   
   wire Cout;
   
-  padder16 inst1(in ^ {N{in[N-1]}}, {N{1'b0}}, in[N-1], out);
+  padder16 inst1(in ^ {N{in[N-1]}}, in[N-1], out);
 endmodule
