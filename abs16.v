@@ -19,14 +19,6 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-module PijGij(\Pi:k , \Pk-1:j , \Gi:k , \Gk-1:j , \Pi:j , \Gi:j );
-  input \Pi:k , \Pk-1:j , \Gi:k , \Gk-1:j ;
-  output \Pi:j , \Gi:j ;
-
-  assign \Pi:j = \Pi:k & \Pk-1:j ;
-  assign \Gi:j = \Gi:k | (\Pi:k  & \Gk-1:j );
-endmodule
-
 module padder16(A, B, Cin, S, Cout);
   localparam N = 16;
   input [N-1:0] A, B;
@@ -56,7 +48,8 @@ module padder16(A, B, Cin, S, Cout);
 
   wire \P2:1 , \G2:1 ;
 
-  PijGij \2:1 (P[2], P[1], G[2], G[1], \P2:1 , \G2:1 );
+  assign \P2:1  = P[2] & P[1] ;
+  assign \G2:1  = G[2] | (P[2]  & G[1] );
 
   wire \G2:-1 ;
 
@@ -72,7 +65,8 @@ module padder16(A, B, Cin, S, Cout);
 
   wire \P4:3 , \G4:3 ;
 
-  PijGij \4:3 (P[4], P[3], G[4], G[3], \P4:3 , \G4:3 );
+  assign \P4:3  = P[4] & P[3] ;
+  assign \G4:3  = G[4] | (P[4]  & G[3] );
 
   wire \G4:-1 ;
 
@@ -82,7 +76,8 @@ module padder16(A, B, Cin, S, Cout);
 
   wire \P5:3 , \G5:3 ;
 
-  PijGij \5:3 (P[5], \P4:3 , G[5], \G4:3 , \P5:3 , \G5:3 );
+  assign \P5:3  = P[5] & \P4:3  ;
+  assign \G5:3  = G[5] | (P[5]  & \G4:3  );
 
   wire \G5:-1 ;
 
@@ -92,11 +87,13 @@ module padder16(A, B, Cin, S, Cout);
 
   wire \P6:5 , \G6:5 ;
 
-  PijGij \6:5 (P[6], P[5], G[6], G[5], \P6:5 , \G6:5 );
+  assign \P6:5  = P[6] & P[5] ;
+  assign \G6:5  = G[6] | (P[6]  & G[5] );
 
   wire \P6:3 , \G6:3 ;
 
-  PijGij \6:3 (\P6:5 , \P4:3 , \G6:5 , \G4:3 , \P6:3 , \G6:3 );
+  assign \P6:3  = \P6:5  & \P4:3  ;
+  assign \G6:3  = \G6:5  | (\P6:5   & \G4:3  );
 
   wire \G6:-1 ;
 
@@ -112,7 +109,8 @@ module padder16(A, B, Cin, S, Cout);
 
   wire \P8:7 , \G8:7 ;
 
-  PijGij \8:7 (P[8], P[7], G[8], G[7], \P8:7 , \G8:7 );
+  assign \P8:7  = P[8] & P[7] ;
+  assign \G8:7  = G[8] | (P[8]  & G[7] );
 
   wire \G8:-1 ;
 
@@ -122,7 +120,8 @@ module padder16(A, B, Cin, S, Cout);
 
   wire \P9:7 , \G9:7 ;
 
-  PijGij \9:7 (P[9], \P8:7 , G[9], \G8:7 , \P9:7 , \G9:7 );
+  assign \P9:7  = P[9] & \P8:7  ;
+  assign \G9:7  = G[9] | (P[9]  & \G8:7  );
 
   wire \G9:-1 ;
 
@@ -132,11 +131,13 @@ module padder16(A, B, Cin, S, Cout);
 
   wire \P10:9 , \G10:9 ;
 
-  PijGij \10:9 (P[10], P[9], G[10], G[9], \P10:9 , \G10:9 );
+  assign \P10:9  = P[10] & P[9] ;
+  assign \G10:9  = G[10] | (P[10]  & G[9] );
 
   wire \P10:7 , \G10:7 ;
 
-  PijGij \10:7 (\P10:9 , \P8:7 , \G10:9 , \G8:7 , \P10:7 , \G10:7 );
+  assign \P10:7  = \P10:9  & \P8:7  ;
+  assign \G10:7  = \G10:9  | (\P10:9   & \G8:7  );
 
   wire \G10:-1 ;
 
@@ -146,7 +147,8 @@ module padder16(A, B, Cin, S, Cout);
 
   wire \P11:7 , \G11:7 ;
 
-  PijGij \11:7 (P[11], \P10:7 , G[11], \G10:7 , \P11:7 , \G11:7 );
+  assign \P11:7  = P[11] & \P10:7  ;
+  assign \G11:7  = G[11] | (P[11]  & \G10:7  );
 
   wire \G11:-1 ;
 
@@ -156,11 +158,13 @@ module padder16(A, B, Cin, S, Cout);
 
   wire \P12:11 , \G12:11 ;
 
-  PijGij \12:11 (P[12], P[11], G[12], G[11], \P12:11 , \G12:11 );
+  assign \P12:11  = P[12] & P[11] ;
+  assign \G12:11  = G[12] | (P[12]  & G[11] );
 
   wire \P12:7 , \G12:7 ;
 
-  PijGij \12:7 (\P12:11 , \P10:7 , \G12:11 , \G10:7 , \P12:7 , \G12:7 );
+  assign \P12:7  = \P12:11  & \P10:7  ;
+  assign \G12:7  = \G12:11  | (\P12:11   & \G10:7  );
 
   wire \G12:-1 ;
 
@@ -170,11 +174,13 @@ module padder16(A, B, Cin, S, Cout);
 
   wire \P13:11 , \G13:11 ;
 
-  PijGij \13:11 (P[13], \P12:11 , G[13], \G12:11 , \P13:11 , \G13:11 );
+  assign \P13:11  = P[13] & \P12:11  ;
+  assign \G13:11  = G[13] | (P[13]  & \G12:11  );
 
   wire \P13:7 , \G13:7 ;
 
-  PijGij \13:7 (\P13:11 , \P10:7 , \G13:11 , \G10:7 , \P13:7 , \G13:7 );
+  assign \P13:7  = \P13:11  & \P10:7  ;
+  assign \G13:7  = \G13:11  | (\P13:11   & \G10:7  );
 
   wire \G13:-1 ;
 
@@ -184,15 +190,18 @@ module padder16(A, B, Cin, S, Cout);
 
   wire \P14:13 , \G14:13 ;
 
-  PijGij \14:13 (P[14], P[13], G[14], G[13], \P14:13 , \G14:13 );
+  assign \P14:13  = P[14] & P[13] ;
+  assign \G14:13  = G[14] | (P[14]  & G[13] );
 
   wire \P14:11 , \G14:11 ;
 
-  PijGij \14:11 (\P14:13 , \P12:11 , \G14:13 , \G12:11 , \P14:11 , \G14:11 );
+  assign \P14:11  = \P14:13  & \P12:11  ;
+  assign \G14:11  = \G14:13  | (\P14:13   & \G12:11  );
 
   wire \P14:7 , \G14:7 ;
 
-  PijGij \14:7 (\P14:11 , \P10:7 , \G14:11 , \G10:7 , \P14:7 , \G14:7 );
+  assign \P14:7  = \P14:11  & \P10:7  ;
+  assign \G14:7  = \G14:11  | (\P14:11   & \G10:7  );
 
   wire \G14:-1 ;
 
