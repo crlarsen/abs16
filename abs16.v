@@ -19,30 +19,30 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 
-module padder16(A, Cin, S);
+module abs16(A, S);
   localparam N = 16;
   input [N-1:0] A;
-  input Cin;
   output [N-1:0] S;
   // P[i] is an alias for Pi:i, likewise G[i] is an alias for Gi:i
+  wire [N-1:0] xorA = A ^ {N{A[N-1]}};
   wire [N-2:-1] P, G;
 
-  assign P = {A[N-2:0], 1'b0};
-  assign G = {{N{1'b0}}, Cin};
+  assign P = {xorA[N-2:0], 1'b0};
+  assign G = {{N{1'b0}}, A[N-1]};
 
-  assign S[0] = A[0] ^ G[-1];
+  assign S[0] = xorA[0] ^ G[-1];
 
   wire \G0:-1 ;
 
   assign \G0:-1  = G[0] | (P[0]  & G[-1] );
 
-  assign S[1] = A[1] ^ \G0:-1 ;
+  assign S[1] = xorA[1] ^ \G0:-1 ;
 
   wire \G1:-1 ;
 
   assign \G1:-1  = G[1] | (P[1]  & \G0:-1  );
 
-  assign S[2] = A[2] ^ \G1:-1 ;
+  assign S[2] = xorA[2] ^ \G1:-1 ;
 
   wire \P2:1 , \G2:1 ;
 
@@ -53,13 +53,13 @@ module padder16(A, Cin, S);
 
   assign \G2:-1  = \G2:1  | (\P2:1   & \G0:-1  );
 
-  assign S[3] = A[3] ^ \G2:-1 ;
+  assign S[3] = xorA[3] ^ \G2:-1 ;
 
   wire \G3:-1 ;
 
   assign \G3:-1  = G[3] | (P[3]  & \G2:-1  );
 
-  assign S[4] = A[4] ^ \G3:-1 ;
+  assign S[4] = xorA[4] ^ \G3:-1 ;
 
   wire \P4:3 , \G4:3 ;
 
@@ -70,7 +70,7 @@ module padder16(A, Cin, S);
 
   assign \G4:-1  = \G4:3  | (\P4:3   & \G2:-1  );
 
-  assign S[5] = A[5] ^ \G4:-1 ;
+  assign S[5] = xorA[5] ^ \G4:-1 ;
 
   wire \P5:3 , \G5:3 ;
 
@@ -81,7 +81,7 @@ module padder16(A, Cin, S);
 
   assign \G5:-1  = \G5:3  | (\P5:3   & \G2:-1  );
 
-  assign S[6] = A[6] ^ \G5:-1 ;
+  assign S[6] = xorA[6] ^ \G5:-1 ;
 
   wire \P6:5 , \G6:5 ;
 
@@ -97,13 +97,13 @@ module padder16(A, Cin, S);
 
   assign \G6:-1  = \G6:3  | (\P6:3   & \G2:-1  );
 
-  assign S[7] = A[7] ^ \G6:-1 ;
+  assign S[7] = xorA[7] ^ \G6:-1 ;
 
   wire \G7:-1 ;
 
   assign \G7:-1  = G[7] | (P[7]  & \G6:-1  );
 
-  assign S[8] = A[8] ^ \G7:-1 ;
+  assign S[8] = xorA[8] ^ \G7:-1 ;
 
   wire \P8:7 , \G8:7 ;
 
@@ -114,7 +114,7 @@ module padder16(A, Cin, S);
 
   assign \G8:-1  = \G8:7  | (\P8:7   & \G6:-1  );
 
-  assign S[9] = A[9] ^ \G8:-1 ;
+  assign S[9] = xorA[9] ^ \G8:-1 ;
 
   wire \P9:7 , \G9:7 ;
 
@@ -125,7 +125,7 @@ module padder16(A, Cin, S);
 
   assign \G9:-1  = \G9:7  | (\P9:7   & \G6:-1  );
 
-  assign S[10] = A[10] ^ \G9:-1 ;
+  assign S[10] = xorA[10] ^ \G9:-1 ;
 
   wire \P10:9 , \G10:9 ;
 
@@ -141,7 +141,7 @@ module padder16(A, Cin, S);
 
   assign \G10:-1  = \G10:7  | (\P10:7   & \G6:-1  );
 
-  assign S[11] = A[11] ^ \G10:-1 ;
+  assign S[11] = xorA[11] ^ \G10:-1 ;
 
   wire \P11:7 , \G11:7 ;
 
@@ -152,7 +152,7 @@ module padder16(A, Cin, S);
 
   assign \G11:-1  = \G11:7  | (\P11:7   & \G6:-1  );
 
-  assign S[12] = A[12] ^ \G11:-1 ;
+  assign S[12] = xorA[12] ^ \G11:-1 ;
 
   wire \P12:11 , \G12:11 ;
 
@@ -168,7 +168,7 @@ module padder16(A, Cin, S);
 
   assign \G12:-1  = \G12:7  | (\P12:7   & \G6:-1  );
 
-  assign S[13] = A[13] ^ \G12:-1 ;
+  assign S[13] = xorA[13] ^ \G12:-1 ;
 
   wire \P13:11 , \G13:11 ;
 
@@ -184,7 +184,7 @@ module padder16(A, Cin, S);
 
   assign \G13:-1  = \G13:7  | (\P13:7   & \G6:-1  );
 
-  assign S[14] = A[14] ^ \G13:-1 ;
+  assign S[14] = xorA[14] ^ \G13:-1 ;
 
   wire \P14:13 , \G14:13 ;
 
@@ -205,16 +205,6 @@ module padder16(A, Cin, S);
 
   assign \G14:-1  = \G14:7  | (\P14:7   & \G6:-1  );
 
-  assign S[15] = A[15] ^ \G14:-1 ;
+  assign S[15] = xorA[15] ^ \G14:-1 ;
 
-endmodule
-
-module abs16(in, out);
-  localparam N = 16;
-  input [N-1:0] in;
-  output [N-1:0] out;
-  
-  wire Cout;
-  
-  padder16 inst1(in ^ {N{in[N-1]}}, in[N-1], out);
 endmodule
